@@ -13,13 +13,33 @@ import javax.swing.table.*;
  *
  * @author alanmsmxyz
  */
-public class ViewBarista extends javax.swing.JFrame {
+public class ViewManageOrder extends javax.swing.JFrame {
+    DefaultTableCellRenderer alignCenter = new DefaultTableCellRenderer();
+    DefaultTableCellRenderer alignRight = new DefaultTableCellRenderer();
+    DefaultTableCellRenderer alignLeft = new DefaultTableCellRenderer();
+
+    DefaultTableModel tableItemsModel;
 
     /**
      * Creates new form serverView
      */
-    public ViewBarista() {
+    public ViewManageOrder() {
         initComponents();
+        
+        // Initiate custom renderer for table cell alignments
+        alignCenter.setHorizontalAlignment(JLabel.CENTER);
+        alignRight.setHorizontalAlignment(JLabel.RIGHT);
+        alignLeft.setHorizontalAlignment(JLabel.LEFT);
+
+        // tableItems's cells text alignment
+        tableItems.getTableHeader().setDefaultRenderer(alignCenter);
+        tableItems.getColumnModel().getColumn(1).setCellRenderer(alignLeft);
+        tableItems.getColumnModel().getColumn(1).setCellRenderer(alignCenter);
+        tableItems.getColumnModel().getColumn(2).setCellRenderer(alignRight);
+        tableItems.getColumnModel().getColumn(3).setCellRenderer(alignRight);
+
+        // cast tableItems table model as DefaultTableModel
+        tableItemsModel = (DefaultTableModel) tableItems.getModel();
     }
 
     /**
@@ -31,21 +51,27 @@ public class ViewBarista extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        containerOrderDetails = new javax.swing.JPanel();
-        labelOrderDetails = new javax.swing.JLabel();
-        containerTableOrderItems = new javax.swing.JScrollPane();
-        tableOrderItems = new javax.swing.JTable();
-        btnFinishOrder = new javax.swing.JButton();
         containerOrderSelector = new javax.swing.JPanel();
         labelOrderSelector = new javax.swing.JLabel();
         containerListOrders = new javax.swing.JScrollPane();
         listOrders = new javax.swing.JList<>();
+        containerOrderDetails = new javax.swing.JPanel();
+        labelOrderDetails = new javax.swing.JLabel();
+        containerTableOrderItems = new javax.swing.JScrollPane();
+        tableItems = new javax.swing.JTable();
+        btnFinishOrder = new javax.swing.JButton();
+        btnUpdateOrders = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        labelOrderSelector.setText("Pilih Order");
+
+        listOrders.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        containerListOrders.setViewportView(listOrders);
+
         labelOrderDetails.setText("Detail Order");
 
-        tableOrderItems.setModel(new javax.swing.table.DefaultTableModel(
+        tableItems.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -53,15 +79,26 @@ public class ViewBarista extends javax.swing.JFrame {
                 "Kopi", "Jumlah", "Harga", "Total"
             }
         ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
             };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
-        containerTableOrderItems.setViewportView(tableOrderItems);
+        tableItems.getTableHeader().setReorderingAllowed(false);
+        containerTableOrderItems.setViewportView(tableItems);
+        if (tableItems.getColumnModel().getColumnCount() > 0) {
+            tableItems.getColumnModel().getColumn(0).setResizable(false);
+            tableItems.getColumnModel().getColumn(0).setPreferredWidth(150);
+            tableItems.getColumnModel().getColumn(1).setResizable(false);
+            tableItems.getColumnModel().getColumn(1).setPreferredWidth(50);
+            tableItems.getColumnModel().getColumn(2).setResizable(false);
+            tableItems.getColumnModel().getColumn(2).setPreferredWidth(100);
+            tableItems.getColumnModel().getColumn(3).setResizable(false);
+            tableItems.getColumnModel().getColumn(3).setPreferredWidth(100);
+        }
 
         btnFinishOrder.setText("Selesaikan Order");
         btnFinishOrder.addActionListener(new java.awt.event.ActionListener() {
@@ -74,53 +111,52 @@ public class ViewBarista extends javax.swing.JFrame {
         containerOrderDetails.setLayout(containerOrderDetailsLayout);
         containerOrderDetailsLayout.setHorizontalGroup(
             containerOrderDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnFinishOrder, javax.swing.GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE)
-            .addGroup(containerOrderDetailsLayout.createSequentialGroup()
-                .addComponent(labelOrderDetails)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(containerOrderDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(containerTableOrderItems, javax.swing.GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE))
+            .addComponent(btnFinishOrder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(labelOrderDetails)
+            .addComponent(containerTableOrderItems, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         containerOrderDetailsLayout.setVerticalGroup(
             containerOrderDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, containerOrderDetailsLayout.createSequentialGroup()
                 .addComponent(labelOrderDetails)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 405, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(containerTableOrderItems, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addComponent(btnFinishOrder))
-            .addGroup(containerOrderDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(containerOrderDetailsLayout.createSequentialGroup()
-                    .addGap(19, 19, 19)
-                    .addComponent(containerTableOrderItems, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(30, Short.MAX_VALUE)))
         );
 
-        labelOrderSelector.setText("Pilih Order");
-
-        listOrders.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        containerListOrders.setViewportView(listOrders);
+        btnUpdateOrders.setText("Perbarui Order");
+        btnUpdateOrders.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateOrdersActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout containerOrderSelectorLayout = new javax.swing.GroupLayout(containerOrderSelector);
         containerOrderSelector.setLayout(containerOrderSelectorLayout);
         containerOrderSelectorLayout.setHorizontalGroup(
             containerOrderSelectorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(containerOrderSelectorLayout.createSequentialGroup()
-                .addComponent(labelOrderSelector)
-                .addGap(0, 175, Short.MAX_VALUE))
-            .addGroup(containerOrderSelectorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(containerListOrders, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE))
+                .addGroup(containerOrderSelectorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(labelOrderSelector)
+                    .addComponent(btnUpdateOrders, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(containerListOrders, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(containerOrderDetails, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         containerOrderSelectorLayout.setVerticalGroup(
             containerOrderSelectorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(containerOrderSelectorLayout.createSequentialGroup()
                 .addComponent(labelOrderSelector)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(containerOrderSelectorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, containerOrderSelectorLayout.createSequentialGroup()
-                    .addGap(0, 20, Short.MAX_VALUE)
-                    .addComponent(containerListOrders, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(containerListOrders, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnUpdateOrders)
+                .addGap(142, 142, 142))
+            .addGroup(containerOrderSelectorLayout.createSequentialGroup()
+                .addComponent(containerOrderDetails, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        labelOrderSelector.getAccessibleContext().setAccessibleName("Pilih Order");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -129,17 +165,13 @@ public class ViewBarista extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(containerOrderSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(containerOrderDetails, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(containerOrderDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(containerOrderSelector, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(containerOrderSelector, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -149,6 +181,10 @@ public class ViewBarista extends javax.swing.JFrame {
     private void btnFinishOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinishOrderActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnFinishOrderActionPerformed
+
+    private void btnUpdateOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateOrdersActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUpdateOrdersActionPerformed
 
     /**
      * @param args the command line arguments
@@ -167,14 +203,42 @@ public class ViewBarista extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ViewBarista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewManageOrder.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ViewBarista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewManageOrder.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ViewBarista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewManageOrder.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ViewBarista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewManageOrder.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -183,13 +247,14 @@ public class ViewBarista extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ViewBarista().setVisible(true);
+                new ViewManageOrder().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFinishOrder;
+    private javax.swing.JButton btnUpdateOrders;
     private javax.swing.JScrollPane containerListOrders;
     private javax.swing.JPanel containerOrderDetails;
     private javax.swing.JPanel containerOrderSelector;
@@ -197,34 +262,45 @@ public class ViewBarista extends javax.swing.JFrame {
     private javax.swing.JLabel labelOrderDetails;
     private javax.swing.JLabel labelOrderSelector;
     private javax.swing.JList<String> listOrders;
-    private javax.swing.JTable tableOrderItems;
+    private javax.swing.JTable tableItems;
     // End of variables declaration//GEN-END:variables
 
+    // Show popup mesage
+    public void showPopup(String message, String title, int type){
+        JOptionPane.showMessageDialog(null, message, title, type);
+    }
+    
     // update orders list
-    public void updateOrdersList(String[] s) {
+    public void updateListOrders(String[] s) {
         listOrders.setListData(s);
     }
     
     // Order table details, controling content of the table
-    public void resetOrderItems() {
-        DefaultTableModel model = (DefaultTableModel) tableOrderItems.getModel();
-        model.getDataVector().clear();
+    public void resetItemsTable() {
+        tableItemsModel.getDataVector().clear();
+        tableItemsModel.fireTableDataChanged();
     }
 
-    public void updateOrderItems(Object[][] content) {
-        DefaultTableModel model = (DefaultTableModel) tableOrderItems.getModel();
-        model.setDataVector(
-                content,
-                new String[]{
-                    "Kopi", "Jumlah", "Hagra", "Total"
-                }
-        );
+    public void updateItemsTable(Object[][] rows) {
+        tableItemsModel.getDataVector().clear();
+        for(Object[] row : rows) tableItemsModel.addRow(row);
+        tableItemsModel.fireTableDataChanged();
+    }
+    
+    // Methods to retreive data from view
+    public int getSelectedOrder() {
+        return listOrders.getSelectedIndex();
     }
 
     // Method to identify action source in handler classes
     public JButton getBtnFinishOrder() {
         return btnFinishOrder;
     }
+    
+    public JButton getBtnUpdateOrders() {
+        return btnUpdateOrders;
+    }
+    
     
     public JList getListOrders() {
         return listOrders;
@@ -233,6 +309,8 @@ public class ViewBarista extends javax.swing.JFrame {
     // Binding ActionListener & MouseListener
     public void addActionListener(ActionListener e) {
         btnFinishOrder.addActionListener(e);
+        btnUpdateOrders.addActionListener(e);
+
     }
     
     public void addMouseAdapter(MouseAdapter e) {

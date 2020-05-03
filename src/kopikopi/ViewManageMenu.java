@@ -13,13 +13,31 @@ import javax.swing.table.*;
  *
  * @author alanmsmxyz
  */
-public class ViewAdmin extends javax.swing.JFrame {
-
+public class ViewManageMenu extends javax.swing.JFrame {
+    DefaultTableCellRenderer alignCenter = new DefaultTableCellRenderer();
+    DefaultTableCellRenderer alignRight = new DefaultTableCellRenderer();
+    DefaultTableCellRenderer alignLeft = new DefaultTableCellRenderer();
+    
+    DefaultTableModel tableMenusModel;
+    
     /**
      * Creates new form CustomerView
      */
-    public ViewAdmin() {
+    public ViewManageMenu() {
         initComponents();
+        
+        alignCenter.setHorizontalAlignment(JLabel.CENTER);
+        alignRight.setHorizontalAlignment(JLabel.RIGHT);
+        alignLeft.setHorizontalAlignment(JLabel.LEFT);
+       
+        // tableMenus's cells text alignment
+        tableMenus.getTableHeader().setDefaultRenderer(alignCenter);
+        tableMenus.getColumnModel().getColumn(0).setCellRenderer(alignCenter);
+        tableMenus.getColumnModel().getColumn(1).setCellRenderer(alignLeft);        
+        tableMenus.getColumnModel().getColumn(2).setCellRenderer(alignRight);
+        
+        // cast tableMenus table model as DefaultTableModel
+        tableMenusModel = (DefaultTableModel) tableMenus.getModel();
     }
 
     /**
@@ -37,9 +55,9 @@ public class ViewAdmin extends javax.swing.JFrame {
         labelMenuPrice = new javax.swing.JLabel();
         inputMenuPrice = new javax.swing.JTextField();
         btnAddMenu = new javax.swing.JButton();
-        btnRemoveMenu = new javax.swing.JButton();
         containerTableMenuList = new javax.swing.JScrollPane();
-        tableMenuList = new javax.swing.JTable();
+        tableMenus = new javax.swing.JTable();
+        labelRemoveMenu = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -53,11 +71,14 @@ public class ViewAdmin extends javax.swing.JFrame {
             }
         });
 
-        btnAddMenu.setText("Tambah ke Menu");
+        btnAddMenu.setText("Tambahkan Menu");
+        btnAddMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddMenuActionPerformed(evt);
+            }
+        });
 
-        btnRemoveMenu.setText("Hapus dari Menu");
-
-        tableMenuList.setModel(new javax.swing.table.DefaultTableModel(
+        tableMenus.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -65,15 +86,31 @@ public class ViewAdmin extends javax.swing.JFrame {
                 "ID", "Kopi", "Harga"
             }
         ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+            boolean[] canEdit = new boolean [] {
+                false, false, false
             };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
-        containerTableMenuList.setViewportView(tableMenuList);
+        tableMenus.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tableMenus.setGridColor(new java.awt.Color(0, 0, 0));
+        tableMenus.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tableMenus.setShowGrid(true);
+        tableMenus.getTableHeader().setResizingAllowed(false);
+        tableMenus.getTableHeader().setReorderingAllowed(false);
+        containerTableMenuList.setViewportView(tableMenus);
+        if (tableMenus.getColumnModel().getColumnCount() > 0) {
+            tableMenus.getColumnModel().getColumn(0).setResizable(false);
+            tableMenus.getColumnModel().getColumn(0).setPreferredWidth(30);
+            tableMenus.getColumnModel().getColumn(1).setResizable(false);
+            tableMenus.getColumnModel().getColumn(1).setPreferredWidth(220);
+            tableMenus.getColumnModel().getColumn(2).setResizable(false);
+            tableMenus.getColumnModel().getColumn(2).setPreferredWidth(150);
+        }
+
+        labelRemoveMenu.setText("* klik menu pada tabel untuk menghapus menu");
 
         javax.swing.GroupLayout panelAdminLayout = new javax.swing.GroupLayout(panelAdmin);
         panelAdmin.setLayout(panelAdminLayout);
@@ -82,21 +119,19 @@ public class ViewAdmin extends javax.swing.JFrame {
             .addGroup(panelAdminLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelRemoveMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(containerTableMenuList, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panelAdminLayout.createSequentialGroup()
-                        .addComponent(btnAddMenu)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRemoveMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(containerTableMenuList, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGroup(panelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelMenuName)
+                            .addComponent(labelMenuPrice))
+                        .addGap(18, 18, Short.MAX_VALUE)
+                        .addGroup(panelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(inputMenuName, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                            .addComponent(inputMenuPrice)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAdminLayout.createSequentialGroup()
-                        .addGroup(panelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelAdminLayout.createSequentialGroup()
-                                .addComponent(labelMenuName)
-                                .addGap(0, 189, Short.MAX_VALUE))
-                            .addComponent(inputMenuName))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelMenuPrice)
-                            .addComponent(inputMenuPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnAddMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         panelAdminLayout.setVerticalGroup(
@@ -105,17 +140,18 @@ public class ViewAdmin extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(panelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelMenuName)
-                    .addComponent(labelMenuPrice))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(inputMenuPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(inputMenuName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAddMenu)
-                    .addComponent(btnRemoveMenu))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(containerTableMenuList, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE))
+                    .addComponent(labelMenuPrice)
+                    .addComponent(inputMenuPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAddMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(containerTableMenuList, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(labelRemoveMenu)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -142,6 +178,10 @@ public class ViewAdmin extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_inputMenuPriceActionPerformed
 
+    private void btnAddMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddMenuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAddMenuActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -159,93 +199,94 @@ public class ViewAdmin extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ViewAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewManageMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ViewAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewManageMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ViewAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewManageMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ViewAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewManageMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ViewAdmin().setVisible(true);
+                new ViewManageMenu().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddMenu;
-    private javax.swing.JButton btnRemoveMenu;
     private javax.swing.JScrollPane containerTableMenuList;
     private javax.swing.JTextField inputMenuName;
     private javax.swing.JTextField inputMenuPrice;
     private javax.swing.JLabel labelMenuName;
     private javax.swing.JLabel labelMenuPrice;
+    private javax.swing.JLabel labelRemoveMenu;
     private javax.swing.JPanel panelAdmin;
-    private javax.swing.JTable tableMenuList;
+    private javax.swing.JTable tableMenus;
     // End of variables declaration//GEN-END:variables
 
-    // Order input overalls, controlling value of selectOrder adn inputOrderQty
-    public void updateMenuInput(String name, String price) {
+    // Show popup mesage
+    public void showPopup(String message, String title, int type){
+        JOptionPane.showMessageDialog(null, message, title, type);
+    }
+    
+    
+    // User Inputs
+    public String getMenuName() {
+        return inputMenuName.getText();
+    }
+    
+    public int getMenuPrice() {
+        try {
+            return Integer.parseInt(inputMenuPrice.getText());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+    
+    public void updateMenuInput(String name, int price) {
         inputMenuName.setText(name);
-        inputMenuPrice.setText(price);
+        inputMenuPrice.setText(String.valueOf(price));
     }
     
     public void resetMenuInput() {
         inputMenuName.setText("");
         inputMenuPrice.setText("");
     }
-    
-    // Methods to gather user input
-    public String getMenuName() {
-        return inputMenuName.getText();
+   
+    // Order items table
+    public int getSelectedMenu() {
+        return tableMenus.getSelectedRow();
     }
     
-    public int getMenuPrice() {
-        return Integer.parseInt(inputMenuPrice.getText());
-    }
-    
-    // Order items table, controling content of the table
-    public void resetMenuList() {
-        DefaultTableModel model = (DefaultTableModel) tableMenuList.getModel();
-        model.getDataVector().clear();
-    }
-
-    public void updateMenuList(Object[][] content) {
-        DefaultTableModel model = (DefaultTableModel) tableMenuList.getModel();
-        model.setDataVector(
-                content,
-                new String[]{
-                    "Kopi", "Hagra"
-                }
-        );
+    public void updateTableMenus(Object[][] rows) {
+        tableMenusModel.getDataVector().clear();
+        for(Object[] row : rows) tableMenusModel.addRow(row);
+        tableMenusModel.fireTableDataChanged();
     }
      
-    // Method to identify action source in handler classes
+    // Returning possible action sources
     public JButton getBtnAddMenu() {
         return btnAddMenu;
     }
-
-    public JButton getBtnRemoveMenu() {
-        return btnRemoveMenu;
-    }
-
-    public JTable getTableMenuList() {
-        return tableMenuList;
+    
+    public JTable getMenusTable() {
+        return tableMenus;
     }
     
     // Binding ActionListener & MouseListener
     public void addActionListener(ActionListener e) {
         btnAddMenu.addActionListener(e);
-        btnRemoveMenu.addActionListener(e);
     }
 
     public void addMouseAdapter(MouseListener e) {
-        tableMenuList.addMouseListener(e);
+        tableMenus.addMouseListener(e);
     }
 }
