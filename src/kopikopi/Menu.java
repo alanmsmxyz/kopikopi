@@ -59,7 +59,6 @@ public class Menu implements DB {
 
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
-            System.out.println(rs);
           
             if(rs.next()) {
                 this.id = rs.getInt(1);                
@@ -103,13 +102,10 @@ public class Menu implements DB {
         }
     }
     
-    
-    
     public static List<Menu> getList() {
-        System.out.println("FINDING LOVE :*");
         Connection conn = null;
         PreparedStatement stmt = null;
-        String query = "SELECT * FROM menu";
+        String query = "SELECT * FROM menu ORDER BY name ASC";
         
         List<Menu> listMenu = new ArrayList<Menu>();
         
@@ -119,7 +115,6 @@ public class Menu implements DB {
            
             ResultSet rs = stmt.executeQuery();
 
-            System.out.println("GETTING LOVE :*");
             while(rs.next()) {
                 listMenu.add(new Menu(
                         rs.getInt("id"),

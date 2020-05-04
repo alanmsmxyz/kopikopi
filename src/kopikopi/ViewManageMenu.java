@@ -61,7 +61,7 @@ public class ViewManageMenu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        labelMenuName.setText("Nama Kopi");
+        labelMenuName.setText("Nama Menu");
 
         labelMenuPrice.setText("Harga");
 
@@ -83,7 +83,7 @@ public class ViewManageMenu extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Kopi", "Harga"
+                "ID", "Menu", "Harga"
             }
         ) {
             boolean[] canEdit = new boolean [] {

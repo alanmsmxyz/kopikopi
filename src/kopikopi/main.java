@@ -27,15 +27,15 @@ public class main {
         switch(menu) {
             case "manage-menu":
                 new ControllerManageMenu();
-                System.out.println("Running in manage menu mode");
+                System.out.println("Running in manage-menu mode");
                 break;
             case "manage-order":
                 new ControllerManageOrder();
-                System.out.println("Running in manage order mode");
+                System.out.println("Running in manage-order mode");
                 break;
             case "create-order":
                 new ControllerCreateOrder();
-                System.out.println("Running in create order mode");
+                System.out.println("Running in create-order mode");
                 break;
             default:
                 System.out.println("No running mode selected!");

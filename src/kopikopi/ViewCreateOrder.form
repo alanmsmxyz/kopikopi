@@ -161,7 +161,7 @@
                   <Table columnCount="4" rowCount="0">
                     <Column editable="false" title="Menu" type="java.lang.Object"/>
                     <Column editable="false" title="Jumlah" type="java.lang.Object"/>
-                    <Column editable="false" title="Hagra" type="java.lang.Object"/>
+                    <Column editable="false" title="Harga" type="java.lang.Object"/>
                     <Column editable="false" title="Total" type="java.lang.Object"/>
                   </Table>
                 </Property>

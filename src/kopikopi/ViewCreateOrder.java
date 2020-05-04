@@ -84,7 +84,7 @@ public class ViewCreateOrder extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Menu", "Jumlah", "Hagra", "Total"
+                "Menu", "Jumlah", "Harga", "Total"
             }
         ) {
             boolean[] canEdit = new boolean [] {

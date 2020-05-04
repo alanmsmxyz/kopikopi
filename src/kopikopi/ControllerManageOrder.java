@@ -37,7 +37,6 @@ public class ControllerManageOrder extends MouseAdapter implements ActionListene
             mapMenu.put(listMenu.get(i).getId(), listMenu.get(i));
         }
         
-        System.out.println(mapMenu);
         listOrder = new ArrayList<Order>();
 
         this.updateListOrdersView();
@@ -84,8 +83,9 @@ public class ControllerManageOrder extends MouseAdapter implements ActionListene
             List<Order.Item> items = listOrder.get(index).getItems();
             Object[][] o = new Object[items.size()][4];
             
+            System.out.println("YOOOOYOOOO");
+            System.out.println(items);
             for(int i = 0; i < items.size(); i++) {
-                System.out.println(items.get(i).getMenu());
                 o[i] = new Object[] {
                     items.get(i).getMenu().getName(),
                     items.get(i).getQty(),

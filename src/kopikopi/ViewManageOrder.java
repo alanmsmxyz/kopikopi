@@ -76,7 +76,7 @@ public class ViewManageOrder extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Kopi", "Jumlah", "Harga", "Total"
+                "Menu", "Jumlah", "Harga", "Total"
             }
         ) {
             boolean[] canEdit = new boolean [] {

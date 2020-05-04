@@ -30,7 +30,7 @@ public class Order implements DB{
         this.isFinished = false;
     }
     
-    public Order(int id, LocalDateTime date, boolean isFinished) {
+    private Order(int id, LocalDateTime date, boolean isFinished) {
         this.id = id;
         this.date = date;
         this.isFinished = isFinished;
@@ -168,11 +168,10 @@ public class Order implements DB{
     }
   
     public static List<Order> getList(Map<Integer, Menu> mapMenu){
-        System.out.println("WHERE ARE THE HOES?!");
         Connection conn = null;
         PreparedStatement stmtOrder = null;
         PreparedStatement stmtItem = null;
-        String queryOrder = "SELECT * FROM order_data WHERE is_finished = false";
+        String queryOrder = "SELECT * FROM order_data WHERE is_finished = false ORDER BY id ASC";
         String queryItem = "SELECT menu_id, qty FROM order_item WHERE order_id = ?";
         
         List<Order> listOrder = new ArrayList<Order>();
@@ -182,31 +181,23 @@ public class Order implements DB{
             stmtOrder = conn.prepareStatement(queryOrder);
             ResultSet rsOrder = stmtOrder.executeQuery();
 
-            System.out.println("GOING TO SHOP! #1");
             while(rsOrder.next()) {
-                System.out.println("#1 wooo!!");
                 listOrder.add( new Order(
                         rsOrder.getInt("id"),
                         rsOrder.getTimestamp("date").toLocalDateTime(),
                         rsOrder.getBoolean("is_finished")
                 ));
-                System.out.println("#1 weee!!");
             }
             rsOrder.close();
 
-            System.out.println("GOING TO SHOP! #2");
             stmtItem = conn.prepareStatement(queryItem);
 
             for(Order order : listOrder) {
-                System.out.println("BEURRE");
                 stmtItem.setInt(1, order.getId());
                 ResultSet rsItem = stmtItem.executeQuery();
                 while(rsItem.next()) {
-                    System.out.println("BEURRE-111");
                     order.addItem(mapMenu.get(rsItem.getInt("menu_id")), rsItem.getInt("qty"));
-                    System.out.println("");
                 }
-                System.out.println(order.getItems());
 
                 rsItem.close();
             }
@@ -220,7 +211,6 @@ public class Order implements DB{
             } catch (Exception e) {
                 Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, e);
             }
-            System.out.println(listOrder);
             return listOrder;
         }
     }
