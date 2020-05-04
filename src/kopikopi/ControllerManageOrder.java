@@ -109,5 +109,6 @@ public class ControllerManageOrder extends MouseAdapter implements ActionListene
         }
         
         view.updateListOrders(s);
+        view.resetItemsTable();
     }
 }
